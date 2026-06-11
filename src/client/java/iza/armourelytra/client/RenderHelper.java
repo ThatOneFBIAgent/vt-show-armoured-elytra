@@ -1,6 +1,9 @@
 package iza.armourelytra.client;
 
 import net.minecraft.core.component.DataComponentType;
+import iza.armourelytra.client.network.ClientVisualCache;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
@@ -15,6 +18,17 @@ import net.minecraft.world.item.component.ItemLore;
 
 public final class RenderHelper {
 	private RenderHelper() {
+	}
+
+	public static ItemStack getChestplateForRender(ItemStack stack, HumanoidRenderState state) {
+		if (state instanceof AvatarRenderState avatarRenderState) {
+			ItemStack cachedStack = ClientVisualCache.get(avatarRenderState.id);
+			if (!cachedStack.isEmpty()) {
+				return cachedStack;
+			}
+		}
+
+		return getBundledChestplate(stack);
 	}
 
 	public static ItemStack getBundledChestplate(ItemStack stack) {
@@ -182,3 +196,4 @@ public final class RenderHelper {
 		}
 	}
 }
+
